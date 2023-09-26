@@ -6,7 +6,7 @@ class user{
     private $name;
     private $lastName;
     private $email;
-    private $passwd;
+    private $password;
     private $confirmPassword;
     const TABLA = 'users';
 
@@ -26,8 +26,8 @@ class user{
         return $this->email;
     }
 
-    public function getPasswd(){
-        return $this->passwd;
+    public function getPassword(){
+        return $this->password;
     }
 
     public function getConfirmPassword(){
@@ -47,30 +47,30 @@ class user{
     }
 
     public function setPassword(){
-        return $this->passwd;
+        return $this->password;
     }
 
     public function setConfirmPassword(){
         return $this->confirmPassword;
     }
 
-    public function __construct($name, $lastName, $email, $passwd, $id = null) {
+    public function __construct($name, $lastName, $email, $password, $id = null) {
         
         $this->name = $name;
         $this->lastName = $lastName;
         $this->email = $email;
-        $this->passwd = $passwd;
+        $this->password = $password;
         $this->id = $id;
     }
 
     public function guardar(){
         $conexion = new Conexion();
         {
-            $consulta = $conexion -> prepare('INSERT INTO ' . self::TABLA . '(name, lastName, email, passwd) VALUES(:name, :lastName, :email, :passwd)');
+            $consulta = $conexion -> prepare('INSERT INTO ' . self::TABLA . '(name, lastName, email, password) VALUES(:name, :lastName, :email, :password)');
             $consulta -> bindParam(':name', $this -> name);
             $consulta -> bindParam(':lastName', $this -> lastName);
             $consulta -> bindParam(':email', $this -> email);
-            $consulta -> bindParam(':passwd', $this -> passwd);
+            $consulta -> bindParam(':password', $this -> password);
             $consulta -> execute();
             $this -> id = $conexion -> lastInsertId();
         }
@@ -83,6 +83,21 @@ class user{
             $registros = $consulta->fetchAll();  
             return $registros;
         
+    }
+
+    public static function verificarInicioSesion($email, $password){
+        $conexion = new Conexion();
+        $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute();
+        if ($stmt != null) {
+                while ($fila= $stmt->fetchAll()) {
+                    $usuario[] =$fila;
+                }
+                return $usuario[0];
+        }else{
+            return false;
+        }
     }
 }
     

@@ -144,7 +144,7 @@
                               </svg></button>
                         </div>
                         <div class="mt-4 d-flex align-items-start justify-content-end" style="color: #529471;">
-                            <p class="me-4">Contáctanos:</p>
+                            <p class="me-4">Contáctanos: </p>
                             <div>
                                 <div class="d-flex align-items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">

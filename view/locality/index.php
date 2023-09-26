@@ -143,17 +143,16 @@ $localities= locality::all();
         </div>
 
         <div class="container-fluid p-4 text-white text-center bg-black">
-  <h1>Lugares</h1>
 </div>
-  
+<h1>Lugares</h1>
+
 <div class="container mt-5"style="width: 60%;">
   <div class="row p-5">
     <div class="table-responsive bg-white mb-5 p-5" style="border-radius:30px;">
         <table class="table" style="background-color:#e5f1e3;">
             <thead>
                 <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nivel</th>
+                    <th scope="col">Localidad</th>
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
@@ -162,7 +161,6 @@ $localities= locality::all();
                 foreach ($localities as $locality) {
                 ?>
                 <tr class="">
-                    <td><?php echo $locality['id'];?></td>
                     <td><?php echo $locality['locality'];?></td>
                     <td><div class="btn-group d-flex">
                         <form action="./edit.php" method="post"><input type="hidden" name="id" value="<?php echo $locality['id'];?>"><input type="submit" class="btn btn-light me-5" value="Editar"></form>

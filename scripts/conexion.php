@@ -8,7 +8,6 @@
         private $contrasena = '';
 
         public function __construct(){
-            //Sobreescribo el método constructor de la clase POO
             try{
                 parent :: __construct("{$this->tipo_de_base}:dbname={$this->nombre_de_base};
                 host={$this->host};charset=utf8", $this->usuario, $this->contrasena);
