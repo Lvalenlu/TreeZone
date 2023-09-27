@@ -35,15 +35,15 @@ class user{
     }
 
     public function setId(){
-        return $this -> id = $id;
+        return $this->id = $id;
     }
 
     public function setNombre(){
-        return $this -> name = $name;
+        return $this->name = $name;
     }
 
     public function setLastName(){
-        return $this -> lastName = $lastName;
+        return $this->lastName = $lastName;
     }
 
     public function setPassword(){
@@ -63,19 +63,13 @@ class user{
         $this->id = $id;
     }
 
-    public function guardar(){
+    public function guardar($name, $lastName, $email, $password){
         $conexion = new Conexion();
-        {
-            $consulta = $conexion -> prepare('INSERT INTO ' . self::TABLA . '(name, lastName, email, password) VALUES(:name, :lastName, :email, :password)');
-            $consulta -> bindParam(':name', $this -> name);
-            $consulta -> bindParam(':lastName', $this -> lastName);
-            $consulta -> bindParam(':email', $this -> email);
-            $consulta -> bindParam(':password', $this -> password);
-            $consulta -> execute();
-            $this -> id = $conexion -> lastInsertId();
-        }
-        $conexion = null;
+            $consulta = $conexion->prepare("INSERT INTO ".self::TABLA."(`name`, `lastName`, `email`, `passwd`) VALUES ('$name','$lastName','$email','$password')");
+            $consulta->execute();
+            return true;
     }
+
     public function recuperarTodos(){
             $conexion = new Conexion();
             $consulta = $conexion->prepare('SELECT * FROM ' . self::TABLA .'');
@@ -88,6 +82,22 @@ class user{
     public static function verificarInicioSesion($email, $password){
         $conexion = new Conexion();
         $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+        $stmt = $conexion->prepare($sql);
+        echo $sql;
+        $stmt->execute();
+        if ($stmt != null) {
+                while ($fila= $stmt->fetchAll()) {
+                    $usuario[] =$fila;
+                }
+                return $usuario[0];
+        }else{
+            return false;
+        }
+    }
+
+    public static function encontrarUsuario($id){
+        $conexion = new Conexion();
+        $sql = "SELECT * FROM users WHERE id = '$id'";
         $stmt = $conexion->prepare($sql);
         $stmt->execute();
         if ($stmt != null) {
