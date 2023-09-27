@@ -7,16 +7,20 @@ $sectors = sector::all();
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="/styles/styles.css">
-    <link rel="stylesheet" href="/styles/main.css">
-    <link rel="shortcut icon" href="../../assets/img"   type="image/x-icon">
+    <link rel="stylesheet" href="../../styles/styles.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="shortcut icon" href="../../../assets/img" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link href="https://db.onlinewebfonts.com/c/85a73fc9e7be7b2f8e14a17362711b9f?family=MotoyaExBirch+W6" rel="stylesheet">
     <link href="https://db.onlinewebfonts.com/c/2113f701d3f2c47b990581da409548ae?family=Bio+Sans+W04+Regular" rel="stylesheet">
     <link rel="icon" href="../../assets/img/TreeZone PNG.png">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    
+
     <title>TreeZone</title>
 </head>
 <body class="overflow-x-hidden" style="font-family: Bio Sans W04 Regular;">
@@ -60,14 +64,9 @@ $sectors = sector::all();
         </div>
     </header>
     <main>
-    <div class="mapa-container">
-    <div class="btn-group w-100" role="group" aria-label="Toggle buttons">
-        <button type="button" class="btn btn-outline-dark active" id="calidadAireBtn">Calidad de Aire</button>
-        <button type="button" class="btn btn-outline-dark" id="cantidadArbolesBtn">Cantidad de Árboles</button>
-    </div>
+
     <div id="mapa" style="left: 0; width: 100%; height: 85%; position: absolute; overflow: hidden;">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63627.804334538116!2d-74.12877810380233!3d4.640799300433638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9beaa5647337%3A0x6fa358372e109359!2sTeusaquillo%2C%20Bogot%C3%A1!5e0!3m2!1ses!2sco!4v1693452379541!5m2!1ses!2sco" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
+        <div id="map" style="height: 100%;"></div>
     </div>
         <div class="modal fade" id="loginForm" tabindex="-1" aria-labelledby="ModalFormLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -264,8 +263,8 @@ $sectors = sector::all();
     </div>
   </div>
 </div>
-        </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    </main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
@@ -314,25 +313,25 @@ $sectors = sector::all();
   });
 </script>
 
-    <script type="module">
-        import { Toast } from 'bootstrap.esm.min.js'
-      
-        Array.from(document.querySelectorAll('.toast'))
-          .forEach(toastNode => new Toast(toastNode))
+
+<script>
+        const map = L.map('map').setView([4.6097, -74.0817], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 21,
+    }).addTo(map);
+    const localidades = [
+    <?php foreach ($sectors as $sector) { ?>
+        { name: '<?php echo $sector['name']?>', airQuality: '<?php echo $sector['level']?>', treeCount: <?php echo $sector['amount_trees']?>, latlng: [<?php echo $sector['latlng']?>, <?php echo $sector['length']?>] },
+        <?php } ?>
+    ];
+    localidades.forEach(localidad => {
+        const marker = L.marker(localidad.latlng).addTo(map);
+        marker.bindPopup(`
+        <strong>Localidad:</strong> ${localidad.name}<br>
+        <strong>Calidad de Aire:</strong> ${localidad.airQuality}<br>
+        <strong>Cantidad de Árboles:</strong> ${localidad.treeCount}
+        `);
+    });
     </script>
-    <script>
-        function mostrarCalidadAireMapa() {
-            document.getElementById("mapa").innerHTML = '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63627.804334538116!2d-74.12877810380233!3d4.640799300433638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9beaa5647337%3A0x6fa358372e109359!2sTeusaquillo%2C%20Bogot%C3%A1!5e0!3m2!1ses!2sco!4v1693452379541!5m2!1ses!2sco" width="100%" height="450" frameborder="0" style="left: 0; height: 100%; position: absolute; overflow: hidden;" allowfullscreen="" loading="lazy"></iframe>';
-            document.getElementById("calidadAireBtn").classList.add("active");
-            document.getElementById("cantidadArbolesBtn").classList.remove("active");
-        }
-        function mostrarCantidadArbolesMapa() {
-            document.getElementById("mapa").innerHTML = '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63627.804334538116!2d-74.12877810380233!3d4.640799300433638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9beaa5647337%3A0x6fa358372e109359!2sTeusaquillo%2C%20Bogot%C3%A1!5e0!3m2!1ses!2sco!4v1693452379541!5m2!1ses!2sco" width="100%" height="450" frameborder="0" style="left: 0; height: 100%; position: absolute; overflow: hidden;" allowfullscreen="" loading="lazy"></iframe>';
-            document.getElementById("calidadAireBtn").classList.remove("active");
-            document.getElementById("cantidadArbolesBtn").classList.add("active");
-        }
-        document.getElementById("calidadAireBtn").addEventListener("click", mostrarCalidadAireMapa);
-        document.getElementById("cantidadArbolesBtn").addEventListener("click", mostrarCantidadArbolesMapa);
-        mostrarCalidadAireMapa();
-    </script>
+
 </html>

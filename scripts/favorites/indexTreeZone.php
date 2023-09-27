@@ -1,5 +1,6 @@
 <?php
 include_once 'favorites.php';
+include_once '../sectors/sector.php';
 include '../user.php';
 
 
@@ -9,22 +10,24 @@ $id = $_SESSION['id'];
 $usuario = user::encontrarUsuario($id);
 if (!$usuario == null) {
     $favorites= Favorites::all($id);
+    $sectores= sector::all();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="../../styles/styles.css">
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="shortcut icon" href="../../../assets/img" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link href="https://db.onlinewebfonts.com/c/85a73fc9e7be7b2f8e14a17362711b9f?family=MotoyaExBirch+W6" rel="stylesheet">
     <link href="https://db.onlinewebfonts.com/c/2113f701d3f2c47b990581da409548ae?family=Bio+Sans+W04+Regular" rel="stylesheet">
-    <link rel="icon" href="./../../assets/img/TreeZone PNG.png">
+    <link rel="icon" href="../../assets/img/TreeZone PNG.png">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    
 
     <title>TreeZone</title>
 </head>
@@ -64,17 +67,10 @@ if (!$usuario == null) {
             </div>
         </div>
     </header>
-    <main>
-    <div class="mapa-container">
-    <div class="btn-group w-100" role="group" aria-label="Toggle buttons">
-        <button type="button" class="btn btn-outline-dark active" id="calidadAireBtn">Calidad de Aire</button>
-        <button type="button" class="btn btn-outline-dark" id="cantidadArbolesBtn">Cantidad de Árboles</button>
-    </div>  
+    <main> 
     <div id="mapa" style="left: 0; width: 100%; height: 85%; position: absolute; overflow: hidden;">
-        <div id="map" style="height: 400px;"></div>
+        <div id="map" style="height: 100%;"></div>
     </div>
-    
-
         <div class="modal fade" id="account" tabindex="-1" aria-labelledby="ModalFormLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -263,6 +259,7 @@ if (!$usuario == null) {
             </div>
     </div>
         </main>
+        
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
@@ -312,35 +309,16 @@ if (!$usuario == null) {
   });
 </script>
 
-        <script type="module">
-            import { Toast } from 'bootstrap.esm.min.js'
-        
-            Array.from(document.querySelectorAll('.toast'))
-            .forEach(toastNode => new Toast(toastNode))
-        </script>
-        <script>
-            function mostrarCalidadAireMapa() {
-                document.getElementById("mapa").innerHTML = '<div id="map" style="height: 100%;"></div>';
-                document.getElementById("calidadAireBtn").classList.add("active");
-                document.getElementById("cantidadArbolesBtn").classList.remove("active");
-            }
-            function mostrarCantidadArbolesMapa() {
-                document.getElementById("mapa").innerHTML = '<div id="map" style="height: 100%;"></div>';
-                document.getElementById("calidadAireBtn").classList.remove("active");
-                document.getElementById("cantidadArbolesBtn").classList.add("active");
-            }
-            document.getElementById("calidadAireBtn").addEventListener("click", mostrarCalidadAireMapa);
-            document.getElementById("cantidadArbolesBtn").addEventListener("click", mostrarCantidadArbolesMapa);
-            mostrarCalidadAireMapa();
-        </script>
+
         <script>
         const map = L.map('map').setView([4.6097, -74.0817], 12);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
+        maxZoom: 21,
     }).addTo(map);
     const localidades = [
-        { name: 'Antonio Nariño', airQuality: 'Bueno', treeCount: 5, latlng: [4.6026, -74.0949] },
-        { name: 'Barrios Unidos', airQuality: 'Moderado', treeCount: 5, latlng: [4.6717, -74.0735] },
+    <?php foreach ($sectores as $sector) { ?>
+        { name: '<?php echo $sector['name']?>', airQuality: '<?php echo $sector['level']?>', treeCount: <?php echo $sector['amount_trees']?>, latlng: [<?php echo $sector['latlng']?>, <?php echo $sector['length']?>] },
+        <?php } ?>
     ];
     localidades.forEach(localidad => {
         const marker = L.marker(localidad.latlng).addTo(map);

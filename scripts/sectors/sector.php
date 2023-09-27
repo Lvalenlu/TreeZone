@@ -60,7 +60,7 @@ class sector{
     }
     public static function all(){
             $conexion = new Conexion();
-            $consulta = $conexion->prepare('SELECT sectors.*, locality.locality, airs.level FROM `sectors` INNER JOIN locality ON locality.id = sectors.id_locality INNER JOIN airs ON airs.id = sectors.id_airs;');
+            $consulta = $conexion->prepare('SELECT sectors.*, airs.level FROM `sectors` INNER JOIN airs ON airs.id = sectors.id_airs;');
             $consulta->execute();
             $airs = $consulta->fetchAll();
             return $airs;
