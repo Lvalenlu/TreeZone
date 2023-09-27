@@ -65,7 +65,7 @@ class user{
 
     public function guardar($name, $lastName, $email, $password){
         $conexion = new Conexion();
-            $consulta = $conexion->prepare("INSERT INTO ".self::TABLA."(`name`, `lastName`, `email`, `passwd`) VALUES ('$name','$lastName','$email','$password')");
+            $consulta = $conexion->prepare("INSERT INTO ".self::TABLA."(`name`, `lastName`, `email`, `password`) VALUES ('$name','$lastName','$email','$password')");
             $consulta->execute();
             return true;
     }

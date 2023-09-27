@@ -1,39 +1,31 @@
 <?php
-include_once 'favorites.php';
-include '../user.php';
+include 'sector.php';
 
-
-
-session_start();
-$id = $_SESSION['id'];
-$usuario = user::encontrarUsuario($id);
-if (!$usuario == null) {
-    $favorites= Favorites::all($id);
+$sectors = sector::all();
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="../styles/styles.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <link rel="shortcut icon" href="../../../assets/img" type="image/x-icon">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="shortcut icon" href="../../assets/img"   type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link href="https://db.onlinewebfonts.com/c/85a73fc9e7be7b2f8e14a17362711b9f?family=MotoyaExBirch+W6" rel="stylesheet">
     <link href="https://db.onlinewebfonts.com/c/2113f701d3f2c47b990581da409548ae?family=Bio+Sans+W04+Regular" rel="stylesheet">
-    <link rel="icon" href="./../../assets/img/TreeZone PNG.png">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
+    <link rel="icon" href="../../assets/img/TreeZone PNG.png">
     <title>TreeZone</title>
 </head>
 <body class="overflow-x-hidden" style="font-family: Bio Sans W04 Regular;">
     <header class="top-0 start-0 w-100 bg-white px-4 py-2 d-flex justify-content-between align-items-center border-bottom" style="height: 100px;">
         <div class="logo d-flex align-items-center">
-            <img src="./../../assets/img/TreeZone icon1.jpg " class="rounded-circle" style="width: 60px; height: 60px;">
+            <img src="../../assets/img/TreeZone icon1.jpg " class="rounded-circle" style="width: 60px; height: 60px;">
             <h3 style="font-family: MotoyaExBirch W6; color: #35635b;">TreeZone</h1>
         </div>
+
         <div class="navbar py-3 px-2 border rounded-pill shadow-sm">
             <nav>
                 <span class="navbar__opc d-flex align-items-center">
@@ -45,21 +37,24 @@ if (!$usuario == null) {
                     </div>
                     <button class="raking px-3 justify-content-center" style="background: none;border: 0; width: 100px; color: #35635b;font-weight:500;" data-bs-toggle="modal" data-bs-target="#ranking">Ranking</button>
                 </span>
-            </nav>
+            </nav>  
         </div>
         <div class="contenedor--usuario h-50">
             <div class="usuario dropdown">
-                <button class="btn dropdown-toggle border rounded-pill d-flex align-items-center" style="color: #35635b;" type="button" id="dropdownUser" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="30" fill="currentColor" class="bi bi-tree-fill" viewBox="0 0 16 16">
-                <path d="M8.416.223a.5.5 0 0 0-.832 0l-3 4.5A.5.5 0 0 0 5 5.5h.098L3.076 8.735A.5.5 0 0 0 3.5 9.5h.191l-1.638 3.276a.5.5 0 0 0 .447.724H7V16h2v-2.5h4.5a.5.5 0 0 0 .447-.724L12.31 9.5h.191a.5.5 0 0 0 .424-.765L10.902 5.5H11a.5.5 0 0 0 .416-.777l-3-4.5z"/>
-                </svg>
+                <button class="btn dropdown-toggle border rounded-pill" style="color: #35635b;" type="button" id="dropdownUser" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                    </svg>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownUser">
-                  <button class="btn dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#favoritePlaces">Lugares Favoritos</button>
-                  <button class="btn dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#account">Cuenta</button>
-                  <li><hr class="dropdown-divider"></li>
-                  <button class="btn dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#helpForm">Ayuda</button>
-                  <button class="btn dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#signOut">Cerrar sesión</button>
+                    <button class="btn dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#loginForm">Iniciar sesión</button>
+                    <button class="btn dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#registerForm">Registrarse</button>
+                    <li><hr class="dropdown-divider"></li>
+                    <button class="btn dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#helpForm">Ayuda</button>
                 </div>
             </div>
         </div>
@@ -69,63 +64,88 @@ if (!$usuario == null) {
     <div class="btn-group w-100" role="group" aria-label="Toggle buttons">
         <button type="button" class="btn btn-outline-dark active" id="calidadAireBtn">Calidad de Aire</button>
         <button type="button" class="btn btn-outline-dark" id="cantidadArbolesBtn">Cantidad de Árboles</button>
-    </div>  
-    <div id="mapa" style="left: 0; width: 100%; height: 85%; position: absolute; overflow: hidden;">
-        <div id="map" style="height: 400px;"></div>
     </div>
-    
-
-        <div class="modal fade" id="account" tabindex="-1" aria-labelledby="ModalFormLabel" aria-hidden="true">
+    <div id="mapa" style="left: 0; width: 100%; height: 85%; position: absolute; overflow: hidden;">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63627.804334538116!2d-74.12877810380233!3d4.640799300433638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9beaa5647337%3A0x6fa358372e109359!2sTeusaquillo%2C%20Bogot%C3%A1!5e0!3m2!1ses!2sco!4v1693452379541!5m2!1ses!2sco" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+        <div class="modal fade" id="loginForm" tabindex="-1" aria-labelledby="ModalFormLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-body my-4 text-center" style="color: #529471;">
+                <div class="modal-body m-4" style="color: #529471;">
                     <button type="button" class="btn-close btn-close-black d-grid" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <h3 class="mb-4 fw-bold">
-                            <?php
-                            echo $usuario[0]['name']. " " .$usuario[0]['lastName'];
-                            ?>
-                        </h3>
-                        <button class="btn dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#signOut">Cerrar sesión</button>
+                    <div class="text-center">
+                        <img src="../../assets/img/TreeZone PNG.png" alt="Logo" class="mb-3" style="height: 100px; width: 100 px;">
+                        <h2 class="mb-4 fw-bold">Iniciar sesión</h2>
                     </div>
+                    
+                    <form method="POST" action="../../scripts/login.php">
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label text-start">Email</label>
+                            <input type="email" class="form-control border-bottom" id="inputEmail" name="email" aria-describedby="emailHelp" style="border: 0; border-bottom: #35635b;">
+                        </div>
+                        <div class="mb-1">
+                            <label for="inputPassword" class="form-label text-start">Contraseña</label>
+                            <input type="password" class="form-control border-bottom" id="inputPassword" name="password" style="border: 0; border-bottom: #35635b;">
+                        </div>
+                        <div  class="text-end mb-3">
+                            <a class="underline" type="button" data-bs-toggle="modal" data-bs-target="#forgotPassword">¿Olvido su contraseña?</a>
+                        </div>
+                        <div class="text-center">
+                            <input type="submit" class="btn mb-5 mt-4 py-2 px-5 fs-5 border-5 rounded-3" style="color: white; border-color: #529471; background-color: #529471;" value="Ingresar">
+                        </div>
+                        <div class="text-end mt-4">
+                            <p>¿No tienes cuenta? <a class="underline" type="button" data-bs-toggle="modal" data-bs-target="#registerForm">Regístrate</a></p>
+                        </div>
+                    </form>
                 </div>
             </div>
             </div>
         </div>
-    <div class="modal fade" id="favoritePlaces" tabindex="-1" aria-labelledby="ModalFormLabel" aria-hidden="true">
-    <div class="row p-5">
-    <div class="table-responsive bg-white mb-5 p-5" style="border-radius:30px;">
-    <button type="button" class="btn-close btn-close-black d-grid" data-bs-dismiss="modal" aria-label="Close"></button>
-    <h1 class=" mb-5 fw-bold text-center" style="color:#529471;">Lugares</h1>
-        <table class="table" style="background-color:#e5f1e3;">
-            <thead>
-                <tr>
-                    <th scope="col">Sector</th>
-                    <th scope="col">Cantidad de Arboles</th>
-                    <th scope="col">Nivel</th>
-                    <th scope="col">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                foreach ($favorites as $favorite) {
-                ?>
-                <tr class="">
-                    <td><?php echo $favorite['name'];?></td>
-                    <td><?php echo $favorite['amount_trees'];?></td>
-                    <td><?php echo $favorite['level'];?></td>
-                    <td><div class="btn-group d-flex">
-                        <form action="delete.php" method="post"><input type="hidden" name="id" value="<?php echo $favorite['id'];?>"><input type="submit" class="btn btn-danger" value="Eliminar"></form>
-                    </div></td>
-                </tr>
-                <?php } ?>
-            </tbody>
-        </table>
-        <div class="text-center">
-        <a href="create.php" class="btn mt-5 mt-4 py-2 px-5 fs-5 border-5 rounded-3" style="color: white; border-color: #529471; background-color: #529471;">Crear</a>
+        <div class="modal fade" id="registerForm" tabindex="-2" aria-labelledby="ModalFormLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body m-4" style="color: #529471;">
+                    <button type="button" class="btn-close btn-close-black d-grid" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="text-center">
+                        <img src="../../assets/img/TreeZone PNG.png" alt="Logo" class="mb-3" style="height: 100px; width: 100 px;">
+                        <h2 class="mb-4 fw-bold">Registrar cuenta</h2>
+                    </div>
+                    <form action="../../scripts/register.php" method="POST">
+                        <div class="mb-3 d-flex align-items-center">
+                            <div class="me-2">
+                                <label for="inputName" class="form-label text-start">Nombre</label>
+                                <input type="text" class="form-control border-bottom" id="inputName" name="name" style="border: 0; border-bottom: #35635b;">
+                            </div>
+                            <div class="ms-2">
+                                <label for="inputName" class="form-label text-start d-flex align-items-center">Apellido</label>
+                                <input type="text" class="form-control border-bottom" id="inputName" name="lastName" style="border: 0; border-bottom: #35635b;">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label text-start">Email</label>
+                            <input type="email" class="form-control border-bottom" id="inputEmail" name="email" aria-describedby="emailHelp" style="border: 0; border-bottom: #35635b;">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputPassword" class="form-label text-start">Contraseña</label>
+                            <input type="password" class="form-control border-bottom" id="inputPassword" name="password" style="border: 0; border-bottom: #35635b;">
+                        </div>
+                        <div class="my-3">
+                            <label for="confirmPassword" class="form-label text-start">Confirmar contraseña</label>
+                            <input type="password" class="form-control border-bottom" id="confirmPassword" style="border: 0; border-bottom: #35635b;">
+                        </div>
+                        <div class="text-center">
+                            <input type="submit" class="btn my-5 mt-4 py-2 px-5 fs-5 border-5 rounded-3" style="color: white; border-color: #529471; background-color: #529471;" value="Registrarse">
+                        </div>
+                        <div class="text-end mt-2">
+                            <p>¿Ya tienes cuenta? <a class="underline" type="button" data-bs-toggle="modal" data-bs-target="#loginForm">Inicia sesión</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            </div>
         </div>
-      </div>
-
-    <div class="modal fade" id="helpForm" tabindex="-1" aria-labelledby="ModalFormLabel" aria-hidden="true">
+        <div class="modal fade" id="helpForm" tabindex="-1" aria-labelledby="ModalFormLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body m-4" style="color: #529471;">
@@ -244,26 +264,8 @@ if (!$usuario == null) {
     </div>
   </div>
 </div>
-
-<div class="modal fade" id="signOut" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Confirmar Cierre de Sesión</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    ¿Estás seguro de que deseas cerrar la sesión?
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-danger" href="principal.php">Cerrar sesión</a>
-                </div>
-            </div>
-            </div>
-    </div>
         </main>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
@@ -312,50 +314,25 @@ if (!$usuario == null) {
   });
 </script>
 
-        <script type="module">
-            import { Toast } from 'bootstrap.esm.min.js'
-        
-            Array.from(document.querySelectorAll('.toast'))
-            .forEach(toastNode => new Toast(toastNode))
-        </script>
-        <script>
-            function mostrarCalidadAireMapa() {
-                document.getElementById("mapa").innerHTML = '<div id="map" style="height: 100%;"></div>';
-                document.getElementById("calidadAireBtn").classList.add("active");
-                document.getElementById("cantidadArbolesBtn").classList.remove("active");
-            }
-            function mostrarCantidadArbolesMapa() {
-                document.getElementById("mapa").innerHTML = '<div id="map" style="height: 100%;"></div>';
-                document.getElementById("calidadAireBtn").classList.remove("active");
-                document.getElementById("cantidadArbolesBtn").classList.add("active");
-            }
-            document.getElementById("calidadAireBtn").addEventListener("click", mostrarCalidadAireMapa);
-            document.getElementById("cantidadArbolesBtn").addEventListener("click", mostrarCantidadArbolesMapa);
-            mostrarCalidadAireMapa();
-        </script>
-        <script>
-        const map = L.map('map').setView([4.6097, -74.0817], 12);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-    }).addTo(map);
-    const localidades = [
-        { name: 'Antonio Nariño', airQuality: 'Bueno', treeCount: 5, latlng: [4.6026, -74.0949] },
-        { name: 'Barrios Unidos', airQuality: 'Moderado', treeCount: 5, latlng: [4.6717, -74.0735] },
-    ];
-    localidades.forEach(localidad => {
-        const marker = L.marker(localidad.latlng).addTo(map);
-        marker.bindPopup(`
-        <strong>Localidad:</strong> ${localidad.name}<br>
-        <strong>Calidad de Aire:</strong> ${localidad.airQuality}<br>
-        <strong>Cantidad de Árboles:</strong> ${localidad.treeCount}
-        `);
-    });
+    <script type="module">
+        import { Toast } from 'bootstrap.esm.min.js'
+      
+        Array.from(document.querySelectorAll('.toast'))
+          .forEach(toastNode => new Toast(toastNode))
     </script>
-
+    <script>
+        function mostrarCalidadAireMapa() {
+            document.getElementById("mapa").innerHTML = '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63627.804334538116!2d-74.12877810380233!3d4.640799300433638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9beaa5647337%3A0x6fa358372e109359!2sTeusaquillo%2C%20Bogot%C3%A1!5e0!3m2!1ses!2sco!4v1693452379541!5m2!1ses!2sco" width="100%" height="450" frameborder="0" style="left: 0; height: 100%; position: absolute; overflow: hidden;" allowfullscreen="" loading="lazy"></iframe>';
+            document.getElementById("calidadAireBtn").classList.add("active");
+            document.getElementById("cantidadArbolesBtn").classList.remove("active");
+        }
+        function mostrarCantidadArbolesMapa() {
+            document.getElementById("mapa").innerHTML = '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63627.804334538116!2d-74.12877810380233!3d4.640799300433638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9beaa5647337%3A0x6fa358372e109359!2sTeusaquillo%2C%20Bogot%C3%A1!5e0!3m2!1ses!2sco!4v1693452379541!5m2!1ses!2sco" width="100%" height="450" frameborder="0" style="left: 0; height: 100%; position: absolute; overflow: hidden;" allowfullscreen="" loading="lazy"></iframe>';
+            document.getElementById("calidadAireBtn").classList.remove("active");
+            document.getElementById("cantidadArbolesBtn").classList.add("active");
+        }
+        document.getElementById("calidadAireBtn").addEventListener("click", mostrarCalidadAireMapa);
+        document.getElementById("cantidadArbolesBtn").addEventListener("click", mostrarCantidadArbolesMapa);
+        mostrarCalidadAireMapa();
+    </script>
 </html>
-
-<?php
-}else{
-    die("Debes iniciar Sesion");
-}
-?>

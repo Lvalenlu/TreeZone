@@ -1,5 +1,5 @@
 <?php
-require_once '../../scripts/conexion.php';
+require_once '../conexion.php';
 class sector{
     
     private $id;
