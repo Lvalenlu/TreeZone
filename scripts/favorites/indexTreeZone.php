@@ -62,7 +62,7 @@ if (!$usuario == null) {
             </div>
         </div>
     </header>
-    <main> 
+    <main>
         <div id="mapa" style="left: 0; width: 100%; height: 85%; position: absolute; overflow: hidden;">
             <div id="map" style="height: 100%;"></div>
         </div>
@@ -81,8 +81,8 @@ if (!$usuario == null) {
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="favoritePlaces" tabindex="-1" aria-labelledby="ModalFormLabel" aria-hidden="true">
-            <div class="row p-5">
+        <div class="modal" id="favoritePlaces" tabindex="-1" aria-labelledby="ModalFormLabel" aria-hidden="true">
+            <div class="modal-center m-5">
                 <div class="table-responsive bg-white mb-5 p-5" style="border-radius:30px;">
                     <button type="button" class="btn-close btn-close-black d-grid" data-bs-dismiss="modal" aria-label="Close"></button>
                     <h1 class=" mb-5 fw-bold text-center" style="color:#529471;">Lugares</h1>
@@ -103,7 +103,7 @@ if (!$usuario == null) {
                                 <td><?php echo $favorite['level'];?></td>
                                 <td>
                                     <div class="d-flex justify-content-center align-items-center">
-                                        <form action="delete.php" method="post">
+                                        <form action="delete.php" method="POST">
                                             <input type="hidden" name="id" value="<?php echo $favorite['id'];?>">
                                             <input type="submit" class="btn btn-danger" value="Eliminar">
                                         </form>
