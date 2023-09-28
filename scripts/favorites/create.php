@@ -67,7 +67,6 @@ $sectors = sector::all();
                     <tr>
                         <th scope="col">Nombre</th>
                         <th scope="col">Cantidad de Arboles</th>
-                        <th scope="col">Localidades</th>
                         <th scope="col">Nivel</th>
                         <th scope="col">Acciones</th>
                     </tr>
@@ -79,7 +78,6 @@ $sectors = sector::all();
                     <tr class="">
                         <td><?php echo $sector['name'] ?></td>
                         <td><?php echo $sector['amount_trees'] ?></td>
-                        <td><?php echo $sector['locality'] ?></td>
                         <td><?php echo $sector['level'] ?></td>
                         <td><form action="add.php" method="post">
                             <input type="hidden" name="id" value="<?php echo $sector['id'] ?>">

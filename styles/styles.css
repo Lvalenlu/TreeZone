@@ -5,7 +5,7 @@ nav > ul > li{
 }
 
 #mapa-container {
-    position: relative;
+    position: absolute;
 }
 
 .btn-group {
